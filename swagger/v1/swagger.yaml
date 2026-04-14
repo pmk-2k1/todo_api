@@ -1,0 +1,207 @@
+---
+openapi: 3.0.1
+info:
+  title: Todo API V1
+  version: v1
+  description: API for managing tasks and users with JWT authentication.
+paths:
+  "/register":
+    post:
+      summary: Registers a new user
+      tags:
+      - Auth
+      parameters: []
+      responses:
+        '200':
+          description: token generated
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+                  enum:
+                  - user
+                  - admin
+              required:
+              - email
+              - password
+  "/login":
+    post:
+      summary: Logs in a user
+      tags:
+      - Auth
+      parameters: []
+      responses:
+        '200':
+          description: token generated
+        '412':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+  "/tasks":
+    get:
+      summary: Retrieves all tasks
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: tasks found
+    post:
+      summary: Creates a task
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: task created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                  - pending
+                  - completed
+                time_start:
+                  type: string
+                  format: date-time
+                time_end:
+                  type: string
+                  format: date-time
+              required:
+              - title
+  "/tasks/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    patch:
+      summary: Updates a task
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: task updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                  - pending
+                  - completed
+    delete:
+      summary: Deletes a task
+      tags:
+      - Tasks
+      security:
+      - Bearer: []
+      responses:
+        '204':
+          description: task deleted
+  "/users":
+    get:
+      summary: Retrieves all users (Admin only)
+      tags:
+      - Users
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: users found
+  "/users/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    patch:
+      summary: Updates a user (Admin only)
+      tags:
+      - Users
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: user updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+                  enum:
+                  - user
+                  - admin
+    delete:
+      summary: Deletes a user (Admin only)
+      tags:
+      - Users
+      security:
+      - Bearer: []
+      responses:
+        '204':
+          description: user deleted
+servers:
+- url: http://localhost:3000
+  description: Local development server
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: 'Enter your Bearer token in the format: Bearer <token>'
