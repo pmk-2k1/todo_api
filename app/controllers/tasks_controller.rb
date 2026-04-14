@@ -22,7 +22,7 @@ class TasksController < ApplicationController
       task.update(task_params)
       render json: task
     else
-      render json: { error: 'Forbidden' }, status: 403
+      render json: { error: "Forbidden" }, status: 403
     end
   end
 

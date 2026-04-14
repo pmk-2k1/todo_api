@@ -10,7 +10,7 @@ RSpec.describe 'Auth API', type: :request do
         properties: {
           email: { type: :string },
           password: { type: :string },
-          role: { type: :string, enum: ['user', 'admin'] }
+          role: { type: :string, enum: [ 'user', 'admin' ] }
         },
         required: [ 'email', 'password' ]
       }
@@ -48,7 +48,7 @@ RSpec.describe 'Auth API', type: :request do
         run_test!
       end
 
-      response '412', 'unauthorized' do
+      response '401', 'unauthorized' do
         let(:credentials) { { email: 'test@example.com', password: 'wrong' } }
         run_test!
       end
