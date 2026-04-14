@@ -1,10 +1,13 @@
 require 'swagger_helper'
 
 RSpec.describe 'Users API', type: :request do
+  let(:admin) { User.create(email: 'admin@example.com', password: 'password', role: :admin) }
+  let(:Authorization) { "Bearer #{JsonWebToken.encode(user_id: admin.id)}" }
+
   path '/users' do
     get 'Retrieves all users (Admin only)' do
       tags 'Users'
-      security [Bearer: []]
+      security [ Bearer: [] ]
       response '200', 'users found' do
         run_test!
       end
@@ -16,7 +19,7 @@ RSpec.describe 'Users API', type: :request do
 
     patch 'Updates a user (Admin only)' do
       tags 'Users'
-      security [Bearer: []]
+      security [ Bearer: [] ]
       consumes 'application/json'
       parameter name: :user, in: :body, schema: {
         type: :object,
@@ -24,7 +27,7 @@ RSpec.describe 'Users API', type: :request do
           full_name: { type: :string },
           email: { type: :string },
           password: { type: :string },
-          role: { type: :string, enum: ['user', 'admin'] }
+          role: { type: :string, enum: [ 'user', 'admin' ] }
         }
       }
 
@@ -37,7 +40,7 @@ RSpec.describe 'Users API', type: :request do
 
     delete 'Deletes a user (Admin only)' do
       tags 'Users'
-      security [Bearer: []]
+      security [ Bearer: [] ]
       response '204', 'user deleted' do
         let(:id) { '1' }
         run_test!
