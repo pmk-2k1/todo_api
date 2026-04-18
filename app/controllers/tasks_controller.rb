@@ -3,11 +3,12 @@ class TasksController < ApplicationController
 
   def index
     if current_user.admin?
-      tasks = Task.all
+      tasks = Task.includes(:user).all
+      render json: tasks, include: { user: { only: [:id, :full_name, :email] } }
     else
       tasks = current_user.tasks
+      render json: tasks
     end
-    render json: tasks
   end
 
   def create

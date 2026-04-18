@@ -5,5 +5,11 @@
 # Example:
 #
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+User.find_or_create_by!(email: 'admin@example.com') do |admin|
+  admin.full_name = 'Administrator'
+  admin.password = '123456'
+  admin.role = :admin
+end
+puts "✅ Admin user ensured (Email: admin@example.com - Password: 123456)"

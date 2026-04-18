@@ -26,6 +26,8 @@ paths:
                   type: string
                 password:
                   type: string
+                full_name:
+                  type: string
                 role:
                   type: string
                   enum:
@@ -43,7 +45,7 @@ paths:
       responses:
         '200':
           description: token generated
-        '412':
+        '401':
           description: unauthorized
       requestBody:
         content:
@@ -58,6 +60,16 @@ paths:
               required:
               - email
               - password
+  "/logout":
+    delete:
+      summary: Logs out a user
+      tags:
+      - Auth
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: logged out successfully
   "/tasks":
     get:
       summary: Retrieves all tasks
@@ -195,6 +207,43 @@ paths:
       responses:
         '204':
           description: user deleted
+  "/me":
+    get:
+      summary: Retrieves current user
+      tags:
+      - Users
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: user found
+  "/update_me":
+    patch:
+      summary: Updates current user
+      tags:
+      - Users
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: user updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                email:
+                  type: string
+                current_password:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
 servers:
 - url: http://localhost:3000
   description: Local development server

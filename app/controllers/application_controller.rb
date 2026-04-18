@@ -1,8 +1,12 @@
 class ApplicationController < ActionController::API
   def current_user
     token = request.headers["Authorization"]&.split(" ")&.last
+    return nil if Rails.cache.read("blacklist_#{token}")
+
     decoded = JsonWebToken.decode(token)
     @current_user ||= User.find(decoded["user_id"]) if decoded
+  rescue ActiveRecord::RecordNotFound
+    nil
   end
 
   def authorize!
