@@ -47,4 +47,37 @@ RSpec.describe 'Users API', type: :request do
       end
     end
   end
+
+  path '/me' do
+    get 'Retrieves current user' do
+      tags 'Users'
+      security [ Bearer: [] ]
+      response '200', 'user found' do
+        run_test!
+      end
+    end
+  end
+
+  path '/update_me' do
+    patch 'Updates current user' do
+      tags 'Users'
+      security [ Bearer: [] ]
+      consumes 'application/json'
+      parameter name: :user, in: :body, schema: {
+        type: :object,
+        properties: {
+          full_name: { type: :string },
+          email: { type: :string },
+          current_password: { type: :string },
+          password: { type: :string },
+          password_confirmation: { type: :string }
+        }
+      }
+
+      response '200', 'user updated' do
+        let(:user) { { full_name: 'Updated Name' } }
+        run_test!
+      end
+    end
+  end
 end
