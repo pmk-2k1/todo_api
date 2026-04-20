@@ -25,6 +25,10 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
+          url: 'https://todo-api-zepw.onrender.com',
+          description: 'Production server'
+        },
+        {
           url: 'http://localhost:3000',
           description: 'Local development server'
         }
